@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using vesphorce_GlobalDataPacks;
 
 
 /**
@@ -16,7 +17,7 @@ public class _script_PlayerMovement_v01 : MonoBehaviour
     public float DiagonalMoveSpeedMultiplier = 1f;
 
     private Vector2 m_Movement;
-    private Vector2 m_Facing;
+    private CharacterFacingDirection player_facing;
 
     public float horizontal, vertical;
     Rigidbody2D Body;
@@ -27,41 +28,10 @@ public class _script_PlayerMovement_v01 : MonoBehaviour
     {
         Body = GetComponent<Rigidbody2D>();
         Body.freezeRotation = true;
+
+        // Default facing direction is "down"
+        player_facing = CharacterFacingDirection.DOWN;
     }
-
-    /*
-    private void MovePlayer()
-    {
-
-        Vector2 pos = Body.velocity;
-        if (vertical != 0)
-        {
-            pos.y = MovementSpeed * Mathf.Sign(vertical);
-        }
-        else
-        {
-            pos.y = 0;
-        }
-        if (horizontal != 0)
-        {
-            pos.x = MovementSpeed * Mathf.Sign(horizontal);
-        }
-        else
-        {
-            pos.x = 0;
-        }
-        if (vertical != 0 && horizontal != 0)
-        {
-            //float average = Mathf.Sqrt(MovementSpeed);
-            float average = Mathf.Sqrt(Mathf.Pow(horizontal, 2) + Mathf.Pow(vertical, 2));
-            pos.x = average * MovementSpeed * Mathf.Sign(horizontal);
-            pos.y = average * MovementSpeed * Mathf.Sign(vertical);
-        }
-
-        Body.velocity = pos;
-        return;
-    }
-    */
 
 
     /**
@@ -71,6 +41,8 @@ public class _script_PlayerMovement_v01 : MonoBehaviour
     {
 
         Vector2 pos = Body.velocity;
+        /*
+         * MARKED FOR DELETION
         if (m_Movement.y != 0)
         {
             pos.y = MovementSpeed * Mathf.Sign(m_Movement.y);
@@ -93,40 +65,100 @@ public class _script_PlayerMovement_v01 : MonoBehaviour
             pos.x = MovementSpeed * (m_Movement.x / average);
             pos.y = MovementSpeed * (m_Movement.y / average);
         }
-
+        */
+        float average = (Mathf.Sqrt(m_Movement.x * m_Movement.x + m_Movement.y * m_Movement.y));
+        if (average == 0)
+        {
+            pos.x = 0;
+            pos.y = 0;
+        }
+        else
+        {
+            pos.x = MovementSpeed * (m_Movement.x / average);
+            pos.y = MovementSpeed * (m_Movement.y / average);
+        }
+        FaceDirection();
         Body.velocity = pos;
         return;
     }
 
+    /**
+     * Sets the direction the player is facing.
+     */
+    private void FaceDirection()
+    {
+        if (m_Movement.x > 0)
+        {
+            player_facing = CharacterFacingDirection.RIGHT;
+        }
+        else if (m_Movement.x < 0)
+        {
+            player_facing = CharacterFacingDirection.LEFT;
+        }
+        else if (m_Movement.y > 0)
+        {
+            player_facing = CharacterFacingDirection.UP;
+        }
+        else if (m_Movement.y < 0)
+        {
+            player_facing = CharacterFacingDirection.DOWN;
+        }
+    }
+
+
+    /**
+     * FixedUpdate is called 60 times per second.
+     */
     private void FixedUpdate()
     {
-        {
-            MovePlayer();
-        }
+        MovePlayer();
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (Input.GetAxisRaw("Horizontal") != 0)
-        {
-            horizontal = Input.GetAxisRaw("Horizontal");
-        }
-        else
-        {
-            horizontal = 0;
-        }
-        if (Input.GetAxisRaw("Vertical") != 0)
-        {
-            vertical = Input.GetAxisRaw("Vertical");
-        }
-        else
-        {
-            vertical = 0;
-        }*/
+
     }
 
+
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        _script_DamageZone hitzone = collision.GetComponent<_script_DamageZone>();
+        if (hitzone != null)
+        {
+            // This might be a good place to handle if the player is still under hit-invincibility.
+
+            // Handle logic of getting hit by an enemy
+            if (hitzone.DamageSource == DamageSource.Enemy)
+            {
+                ProcessDamageFromEnemy(hitzone.GetPayload());
+            }
+            // Handle logic of getting hit by an environmental hazard.
+            if (hitzone.DamageSource == DamageSource.Environment)
+            {
+                DamageSourcePayload payload = hitzone.GetPayload();
+            }
+            // Handle logic of getting hit by an undefined hazard.
+            if (hitzone.DamageSource == DamageSource.Other)
+            {
+                Debug.Log("Player hit undefined hazard.");
+            }
+        }
+        // Code above only handles trigger zones with a DamageZone component
+        // Code below handles other trigger zones, like loading zones or cutscene triggers.
+
+    }
+
+
+    /**
+     * Whenever the player is hit by an enemy, processes the on-hit payload.
+     */
+    private void ProcessDamageFromEnemy(DamageSourcePayload payload)
+    {
+        Debug.Log("Player took damage: " + payload.DamageDealt);
+    }
 
 
     /* INPUT SYSTEM */
