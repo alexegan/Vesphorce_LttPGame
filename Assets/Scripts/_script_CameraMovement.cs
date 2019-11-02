@@ -21,7 +21,7 @@ public class _script_CameraMovement : MonoBehaviour
 
 
     private Camera camera;
-    private Dictionary<int, _script_FocusPointLogic> FocusPoints;
+    //private Dictionary<int, _script_FocusPointLogic> FocusPoints;
     private GameObject Player;
 
     private void Awake()
@@ -38,10 +38,10 @@ public class _script_CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FocusPoints = new Dictionary<int, _script_FocusPointLogic>();
+        //FocusPoints = new Dictionary<int, _script_FocusPointLogic>();
         Player = GameObject.FindGameObjectWithTag("Player");
         // TODO: Figure out how to define focus points better.
-        GameObject[] focusObject = GameObject.FindGameObjectsWithTag("camera_FocusPoints");
+        //GameObject[] focusObject = GameObject.FindGameObjectsWithTag("camera_FocusPoints");
 
 
         if (Player == null)
