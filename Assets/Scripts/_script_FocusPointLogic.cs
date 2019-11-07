@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// TODO: Write description of what a focus point is
+/// </summary>
 public class _script_FocusPointLogic : MonoBehaviour
 {
     public int DebugLevel = 3;
-
 
     private SpriteRenderer AttachedSprite;
     private GameObject Attached;
@@ -34,10 +36,7 @@ public class _script_FocusPointLogic : MonoBehaviour
     {
         if (AttachedSprite != null)
         {
-            if ((PlayerPrefs.GetInt("DebugMode") > DebugLevel))
-                AttachedSprite.enabled = true;
-            else
-                AttachedSprite.enabled = false;
+	        AttachedSprite.enabled = PlayerPrefs.GetInt("DebugMode") > DebugLevel;
         }
     }
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-/**
- * A super-quick example class to show some of the built-in methods Unity has for us to work with.
- */
+/// <summary>
+///	A super-quick example class to show some of the built-in methods Unity has for us to work with.
+/// </summary>
 public class _script_Testing : MonoBehaviour
 {
     /**
@@ -21,11 +21,11 @@ public class _script_Testing : MonoBehaviour
 
     // You can easily find guides on how to modify Inspector settings to your whims.
 
-    /**
-     * If you want to do simple drop-down boxes in the inspector, that's done through enums.
-     * In this example, I defined three options for a bomb's explosion pattern.
-     */
-    public enum SpreadType
+    /// <summary>
+    ///	If you want to do simple drop-down boxes in the inspector, that's done through enums.
+	///	In this example, I defined three options for a bomb's explosion pattern.
+    /// </summary>
+	public enum SpreadType
     {
         Plus,
         Circle,
@@ -33,13 +33,12 @@ public class _script_Testing : MonoBehaviour
     };
     public SpreadType FireSpreadType = SpreadType.Plus;
 
-    /**
-     * Awake is called before Start. If you want to ensure things are ready (like a certain object exists) before you
-     * initialize any values for those objects, you'll likely want to check that in Awake.
-     * 
-     * Singleton behavior is also often done here - so if we only want to have one object with this script in the scene,
-     * this is the common place to do it.
-     */
+    /// <summary>
+    ///	Awake is called before Start. If you want to ensure things are ready (like a certain object exists) before you
+	///	initialize any values for those objects, you'll likely want to check that in Awake.
+    ///	Singleton behavior is also often done here - so if we only want to have one object with this script in the scene,
+	///	this is the common place to do it.
+    /// </summary>
     private void Awake()
     {
         
@@ -49,13 +48,13 @@ public class _script_Testing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
 
-    /**
-     * FixedUpdate fires on 1/50 second intervals. This is what built-in physics engine uses for it's updates.
-     */
-    private void FixedUpdate()
+	}
+
+    /// <summary>
+    /// FixedUpdate fires on 1/50 second intervals. This is what built-in physics engine uses for it's updates.
+    /// </summary>
+	private void FixedUpdate()
     {
         
     }
@@ -63,18 +62,17 @@ public class _script_Testing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
 
-    /**
-     * LateUpdate is called at the end of every frame.
-     * I hear this is great for UI
-     */
-    private void LateUpdate()
+	}
+
+    /// <summary>
+    /// LateUpdate is called at the end of every frame.
+	/// I hear this is great for UI
+    /// </summary>
+	private void LateUpdate()
     {
         
     }
-
 
 
 
@@ -90,7 +88,9 @@ public class _script_Testing : MonoBehaviour
      * 
      * The collision variable can let you extract what kind of gameobject the trigger zone is.
      */
-    private void OnTriggerExit2D(Collider2D collision)
+
+
+	private void OnTriggerExit2D(Collider2D collision)
     {
         
     }

@@ -6,11 +6,10 @@ using UnityEngine.InputSystem.Interactions;
 using vesphorce_GlobalDataPacks;
 
 
-/**
- * Author: AlexEgan
- * 
- * Currently, this is just pilfered from a previous project to get something working for now.
- */
+/// <summary>
+/// Author: AlexEgan
+/// Currently, this is just pilfered from a previous project to get something working for now.
+/// </summary>
 public class _script_PlayerMovement_v01 : MonoBehaviour
 {
     public float MovementSpeed = 5f;
@@ -31,13 +30,13 @@ public class _script_PlayerMovement_v01 : MonoBehaviour
 
         // Default facing direction is "down"
         player_facing = CharacterFacingDirection.DOWN;
-    }
+	}
 
 
-    /**
-     * Uses m_Movement
-     */
-    private void MovePlayer()
+    /// <summary>
+    /// Uses m_Movement
+    /// </summary>
+	private void MovePlayer()
     {
 
         Vector2 pos = Body.velocity;
@@ -79,12 +78,11 @@ public class _script_PlayerMovement_v01 : MonoBehaviour
         }
         FaceDirection();
         Body.velocity = pos;
-        return;
-    }
+	}
 
-    /**
-     * Sets the direction the player is facing.
-     */
+    /// <summary>
+    /// Sets the direction the player is facing.
+    /// </summary>
     private void FaceDirection()
     {
         if (m_Movement.x > 0)
@@ -103,12 +101,12 @@ public class _script_PlayerMovement_v01 : MonoBehaviour
         {
             player_facing = CharacterFacingDirection.DOWN;
         }
-    }
+	}
 
 
-    /**
-     * FixedUpdate is called 60 times per second.
-     */
+	/// <summary>
+	/// FixedUpdate is called 60 times per second.
+	/// </summary>
     private void FixedUpdate()
     {
         MovePlayer();

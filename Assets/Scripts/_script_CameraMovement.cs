@@ -1,7 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This script defines the camera movement behaviour.
+/// </summary>
 public class _script_CameraMovement : MonoBehaviour
 {
     [Tooltip("Scales all camera values by this amount for uniform resizing.")]
@@ -17,8 +21,6 @@ public class _script_CameraMovement : MonoBehaviour
     [Tooltip("How much more camera padding the Player is given when determining the camera's movement.")]
     [Range(1, 100)]
     public float PlayerWeight = 1f;
-
-
 
     private Camera camera;
     //private Dictionary<int, _script_FocusPointLogic> FocusPoints;
@@ -43,7 +45,6 @@ public class _script_CameraMovement : MonoBehaviour
         // TODO: Figure out how to define focus points better.
         //GameObject[] focusObject = GameObject.FindGameObjectsWithTag("camera_FocusPoints");
 
-
         if (Player == null)
         {
             Debug.Log("Cannot find Player");
@@ -60,7 +61,7 @@ public class _script_CameraMovement : MonoBehaviour
             if (PlayerWeight > 1)
             {
                 Vector2 weightedPos = Player.transform.position;
-                float pWeight = ((PlayerWeight) / 10f);
+                float pWeight = PlayerWeight / 10f;
                 input.Add(new Vector2(weightedPos.x + pWeight, weightedPos.y + pWeight));
                 input.Add(new Vector2(weightedPos.x - pWeight, weightedPos.y + pWeight));
                 input.Add(new Vector2(weightedPos.x + pWeight, weightedPos.y - pWeight));
@@ -68,18 +69,19 @@ public class _script_CameraMovement : MonoBehaviour
             }
             CameraMovement(input);
         }
-    }
+	}
 
 
 
 
-    /*
-     * Reads the list of points of focus the camera is based upon.
-     * 
-     * Input list is the list of dynamic objects that change frequently.
-     * TODO: fix how the input vectors are determined.
-     */
-    private void CameraMovement(List<Vector2> AdditionalFocusPoints)
+    /// <summary>
+    /// Reads the list of points of focus the camera is based upon.
+    /// Input list is the list of dynamic objects that change frequently.
+    /// 
+	/// TODO: fix how the input vectors are determined.
+    /// </summary>
+	/// <param name="AdditionalFocusPoints">Additional focus points</param>
+	private void CameraMovement(List<Vector2> AdditionalFocusPoints)
     {
         float cam_size, x_dist_min, x_dist_max, y_dist_min, y_dist_max, x_dist, y_dist;
         
@@ -87,18 +89,15 @@ public class _script_CameraMovement : MonoBehaviour
 
         x_dist_min = y_dist_min = 10000f;
         x_dist_max = y_dist_max = -10000f;
+
         // Move the camera so that it's focused on the center of the focus points.
         foreach (Vector2 point in AdditionalFocusPoints)
         {
-            // min/max distance between points
-            if (x_dist_min > point.x)
-                x_dist_min = point.x;
-            if (x_dist_max < point.x)
-                x_dist_max = point.x;
-            if (y_dist_min > point.y)
-                y_dist_min = point.y;
-            if (y_dist_max < point.y)
-                y_dist_max = point.y;
+			// Sets the min/max distance between points
+			x_dist_min = Mathf.Min(x_dist_min, point.x);
+			x_dist_max = Mathf.Max(x_dist_max, point.x);
+			y_dist_min = Mathf.Min(y_dist_min, point.y);
+			y_dist_max = Mathf.Max(y_dist_max, point.y);
         }
 
         cam_size = 0;
@@ -106,25 +105,15 @@ public class _script_CameraMovement : MonoBehaviour
         y_dist = (y_dist_max - y_dist_min);
 
         camera.transform.position = new Vector3(((x_dist_max + x_dist_min) / 2), ((y_dist_max + y_dist_min) / 2), -10);
-        if ((x_dist) > (y_dist))
-            cam_size = x_dist;
-        else
-            cam_size = y_dist;
+        cam_size = x_dist > y_dist ? x_dist : y_dist;
 
         cam_size += CameraZoomOffset;
         cam_size /= 2;
 
-        if (cam_size < CameraZoomDefaultMin)
-        {
-            cam_size = CameraZoomDefaultMin;
-        }
-        if (cam_size > CameraZoomDefaultMax)
-        {
-            cam_size = CameraZoomDefaultMax;
-        }
+		// Clamps camera zoom level within the min & max zoom values
+        cam_size = Mathf.Clamp(cam_size, CameraZoomDefaultMin, CameraZoomDefaultMax);
 
         camera.orthographicSize = cam_size * CameraSettingsScale;
-        return;
     }
 
 }

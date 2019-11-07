@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using vesphorce_GlobalDataPacks;
 
+/// <summary>
+/// This script currently defines the damage zone behaviour of the sword weapon
+/// </summary>
 public class _script_DamageZone : MonoBehaviour
 {
 
